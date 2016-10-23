@@ -15,6 +15,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <!-- Can this run in app level componentWillMount? -->
     <script>
     window.addEventListener('load', function() {
       var outputElement = document.getElementById('root');
@@ -28,7 +29,7 @@
         });
 
       window.addEventListener('beforeinstallprompt', function(e) {
-        outputElement.textContent = 'beforeinstallprompt Event fired';
+        // outputElement.textContent = 'beforeinstallprompt Event fired';
       });
     });
     </script>
