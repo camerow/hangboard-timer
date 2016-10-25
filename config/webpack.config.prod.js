@@ -138,7 +138,7 @@ module.exports = {
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
       {
-        test: /\.json$/,
+        test: /^manifest$\.json$/,
         loader: 'json'
       },
       // "file" loader makes sure those assets end up in the `build` folder.
