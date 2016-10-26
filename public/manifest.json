@@ -1,7 +1,7 @@
 {
   "name": "Hangboarder",
   "short_name": "Hangboarder",
-  "start_url": ".",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#fff",
   "theme-color": "#333",
@@ -20,5 +20,6 @@
 	],
   "related_applications": [{
     "platform": "web"
-  }]
+  }],
+  "orientation": "portrait"
 }
