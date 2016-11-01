@@ -6,9 +6,10 @@ export default class TimerValueSelect extends Component {
     const { valueName, value, onIncrement, onDecrement } = this.props;
 
     return(
-      <div className="col-xs-3">
+      <div style={{ fontSize: "20px", textAlign: "center"}} className="col-xs-3">
         <ArrowButton direction="up" handleClick={ onIncrement } />
-        <div style={{margin: "10px 0"}}>{valueName}: {value}</div>
+        <div className="row" style={{ margin: "10px 0"}}>{valueName}</div>
+        <div className="row" style={{ margin: "10px 0 0 0"}}>{value}</div>
         <ArrowButton direction="down" handleClick={ onDecrement } />
       </div>
     );

@@ -15,8 +15,19 @@ export default class HangboardTimer extends Component {
         reps: 0,
         recover: 0
       },
-      started: false,
-      watchInterval: "hang"
+      currentValue: 0,
+      currentInterval: 'hang',
+      started: false
+    }
+  }
+
+  componentDidMount() {
+    let cachedIntervals = JSON.parse(localStorage.getItem('intervals'));
+
+    if (cachedIntervals) {
+      this.setState({
+        intervals: cachedIntervals
+      });
     }
   }
 
@@ -28,67 +39,36 @@ export default class HangboardTimer extends Component {
     })
   }
 
-  startRestTimer(hangSec, restSec) {
-    let { rest, reps } = this.state.intervals;
-
-    this.rest = setInterval(() => {
-      this.setState({
-        intervals: {
-          rest: this.state.rest - 1
-        }
-      });
-
-      if (rest < 0 && reps >= 0) {
-        clearInterval(this.rest);
-        this.setState({
-          intervals: {
-            hang: hangSec,
-            rest: restSec
-          }
-        });
-        this.startHangTimer(hangSec, restSec);
+  intervalOrdering() {
+    const ordering = ["hang", "rest"];
+    let index = 0;
+    let head = ordering[index];
+    this.next = function() {
+      if (index > ordering.length - 1) {
+        index = 0;
       }
-    }, 1000);
+      let next = ordering[index];
+      index += 1;
+      return next;
+    }
+
+    return head;
   }
 
-  startHangTimer(hangSec, restSec) {
-    let { hang, reps } = this.state.intervals;
+  startHangTimer() {
+    const { hang, rest, reps, recover } = this.state.intervals;
+    let self = this;
 
-    this.setState({
-      started: true
-    });
-
-    this.hang = setInterval(() => {
-      this.setState({
-        intervals: {
-          hang: this.state.hang - 1
-        }
+    this.currentInterval = setInterval(function() {
+      self.setState({
+        currentValue: self.state.intervals[self.state.currentInterval] - 1
       })
-      
-      if (hang < 0 && reps >= 0) {
-        clearInterval(this.hang);
-
-        this.setState({
-          intervals: {
-            hang: hangSec,
-            reps: reps - 1
-          }
-        });
-
-        this.startRestTimer(hangSec, restSec)
-
-      }
-      if (hang < 0) {
-        clearInterval(this.hang)
-      };
-
-      if (reps === 0) {
-        this.setState({
-          started: false
-        });
-        this.stopHangRestTimers();
-      }
     }, 1000);
+
+  }
+
+  persistIntervals(intervals) {
+    localStorage.setItem('intervals', JSON.stringify(this.state.intervals));
   }
 
   incrementInterval(intervalName) {
@@ -96,9 +76,16 @@ export default class HangboardTimer extends Component {
       [intervalName]: { $apply: function(x) { return x + 1 }}
     });
 
+    let self = this;
+    this.tid = setTimeout(function() {
+      self.persistIntervals(newIntervalState);
+    }, 0);
+    clearTimeout(this.tid);
+
     this.setState({
       intervals: newIntervalState
-    })
+    });
+
   }
 
   decrementInterval(intervalName) {
@@ -109,10 +96,16 @@ export default class HangboardTimer extends Component {
     let newIntervalState = update(this.state.intervals, {
       [intervalName]: { $apply: function(x) { return x - 1 }}
     });
+    let self = this;
+    this.tid = setTimeout(function() {
+      self.persistIntervals(newIntervalState);
+    }, 0);
+    clearTimeout(this.tid);
 
     this.setState({
       intervals: newIntervalState
-    })
+    });
+
   }
 
   render() {
@@ -136,7 +129,9 @@ export default class HangboardTimer extends Component {
         <div className="row">
           <div>
             <div style={{ textAlign: "center"}} className="col-xs-12 col-md-8 col-md-offset-2">
-              <h1>{this.state.intervals[this.state.watchInterval]}</h1>
+              <h1>{ this.state.currentInterval }</h1>
+              <h1>{ this.state.currentValue }</h1>
+              <h2>{ this.state.intervals.reps } remaing.</h2>
             </div>
           </div>
         </div>
