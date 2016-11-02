@@ -113,7 +113,7 @@ class IntervalTimer extends Component {
     let { recover, ...rest } = nextProps;
 
     this.setState({
-      recover: recover,
+      recover: recover * 60,
       ...rest
     })
 
