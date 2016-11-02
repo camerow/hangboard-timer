@@ -6,3 +6,6 @@ html, body {
   width: 100%;
   position: fixed;
 }
+.site-wrapper, #root {
+  height: 100%;
+}

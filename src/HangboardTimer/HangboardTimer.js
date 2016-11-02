@@ -62,15 +62,22 @@ export default class HangboardTimer extends Component {
   }
 
   render() {
+    const styles={
+      height: (this.state.started ? '0' : '200px'),
+      transition: "all 500ms ease",
+      fontSize: "20px",
+      height: "20%",
+      textAlign: "center"
+    }
+
     return (
-      <div>
-        <div className="row">
+      <div style={{ height: '100%'}}>
+        <div style={ styles } className="row">
           {
-            this.state.started ?
-            null :
             Object.keys(this.state.intervals).map((interval, i) => {
               return (
                 <TimerValueSelect
+                  timerStarted={this.state.started}
                   key={interval + i}
                   valueName={interval}
                   value={this.state.intervals[interval]}
@@ -81,10 +88,10 @@ export default class HangboardTimer extends Component {
             })
           }
         </div>
-        <div className="row">
+        <div style={{ height: "60%"}} className="row">
           <IntervalTimer start={ this.state.started } {...this.state.intervals} />
         </div>
-        <div className="row">
+        <div style={{ display: 'block', height: '20%'}} className="row">
           <div className="col-xs-12 col-md-8 col-md-offset-2">
             <TimerButton
             timerRunning={ this.state.started }
@@ -106,7 +113,7 @@ class IntervalTimer extends Component {
     let { recover, ...rest } = nextProps;
 
     this.setState({
-      recover: recover * 60,
+      recover: recover,
       ...rest
     })
 
@@ -120,45 +127,67 @@ class IntervalTimer extends Component {
   }
 
   startRest() {
-    this.restTimer = setInterval(() => {
-      if (this.state.rest <= 0) {
-        clearInterval(this.restTimer);
-        this.setState({
-          rest: this.props.rest
-        });
-        this.startHang();
-      } else {
-        this.setState({
-          rest: this.state.rest - 1
-        })
-      }
-    }, 1000);
+    if (this.state.reps === 0) {
+      this.setState({
+        currentInterval: 'recover',
+        hang: this.props.hang
+      });
+      this.startRecovery();
+    } else {
+      this.setState({
+        currentInterval: 'rest',
+        hang: this.props.hang
+      });
+
+      this.restTimer = setInterval(() => {
+        if (this.state.rest <= 0) {
+          clearInterval(this.restTimer);
+          this.startHang();
+
+        } else {
+          this.setState({
+            rest: this.state.rest - 1
+          })
+        }
+      }, 1000);
+    }
   }
   // these should be minutes
   startRecovery() {
+    this.setState({
+      hang: this.props.hang,
+      reps: this.props.reps
+    });
+
     this.recoveryTimer = setInterval(() => {
-      if (this.state.recovery <= 0) {
+      if (this.state.recover <= 0) {
         clearInterval(this.recoveryTimer);
         this.setState({
-          recovery: this.props.recovery
-        })
+          recover: this.props.recover
+        });
+        this.startRest();
       } else {
         this.setState({
-          recovery: this.state.recovery - 1
+          recover: this.state.recover - 1
         })
       }
     }, 1000);
   }
 
   startHang() {
+    this.setState({
+      currentInterval: 'hang',
+      rest: this.props.rest
+    });
+
     this.hangTimer = setInterval(() => {
       if (this.state.hang <= 0) {
-        clearInterval(this.hangTimer);
         this.setState({
-          reps: this.state.reps - 1,
-          hang: this.props.hang
-        })
+          reps: this.state.reps - 1
+        });
         this.startRest();
+        clearInterval(this.hangTimer);
+
       } else if (this.state.reps >= 0) {
         this.setState({
           hang: this.state.hang - 1
@@ -176,17 +205,23 @@ class IntervalTimer extends Component {
   }
 
   stopTimer() {
+    clearInterval(this.hangTimer);
+    clearInterval(this.restTimer);
+    clearInterval(this.recoveryTimer);
   }
 
   render() {
     return (
       <div style={{ textAlign: "center", fontSize: "50px"}} className="col-xs-12 col-md-8 col-md-offset-2">
         <div>
+        {
+          this.state.currentInterval ?
+          `${this.state.currentInterval}: ${this.state[this.state.currentInterval]}`
+          :
+          null
+        }
+          <br></br>
           Reps: {this.state.reps}
-          <br></br>
-          Hang: {this.state.hang}
-          <br></br>
-          Rest: {this.state.rest}
         </div>
       </div>
     );
