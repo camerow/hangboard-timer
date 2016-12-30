@@ -68,12 +68,13 @@ export default class HangboardTimer extends Component {
     const { started } = this.state;
 
     const styles = {
+      timerContainer: {
+         height: '100%',
+         display: 'block'
+      },
       timerSelect: {
           transition: "all 500ms ease",
           fontSize: "20px",
-          // height: '20%',
-          // visibility: (this.state.started ? 'hidden' : 'visible'),
-          // minHeight: (this.state.started ? '0' : "20%"),
           maxHeight: (started ? '0' : '30%'),
           textAlign: "center",
           overflow: 'hidden'
@@ -84,7 +85,6 @@ export default class HangboardTimer extends Component {
         },
         timerButtonContainer: {
           position:'fixed',
-          // left:'0px',
           bottom:'0px',
           height:'12%',
           width:'100%'
@@ -93,7 +93,7 @@ export default class HangboardTimer extends Component {
 
 
     return (
-      <div style={{ height: '100%', display: 'block'}}>
+      <div style={ styles.timerContainer }>
         <div style={ styles.timerSelect } className="row">
           {
             Object.keys(this.state.intervals).map((interval, i) => {

@@ -117,20 +117,23 @@ export default class IntervalTimer extends Component {
   }
 
   render() {
+    const { currentInterval } = this.state;
     const styles = {
-      transition: "all 500ms ease"
-    }
-    console.log("duration", this.props[this.state.currentInterval], this.state.currentInterval);
+      timerDisplay: {
+        textAlign: "center",
+        fontSize: "50px"
+      }
+    };
+
     return (
-      <div style={{ textAlign: "center", fontSize: "50px"}} className="col-xs-12 col-md-8 col-md-offset-2">
+      <div style={ styles.timerDisplay } className="col-xs-12 col-md-8 col-md-offset-2">
         <div>
         {
-          this.state.currentInterval ?
+          currentInterval ?
           <IntervalTimerDisplay
-            style={{ styles }}
-            intervalName={this.state.currentInterval}
-            duration={this.props[this.state.currentInterval]}
-            value={this.state[this.state.currentInterval]}>
+            intervalName={currentInterval}
+            duration={this.props[currentInterval]}
+            value={this.state[currentInterval]}>
           </IntervalTimerDisplay>
           :
           null

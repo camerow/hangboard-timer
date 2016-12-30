@@ -16,7 +16,9 @@ export default class TimerButtons extends Component {
     const { onStartClick } = this.props;
 
     return (
-      <button style={styles.button} onClick={ onStartClick }>{this.props.timerRunning ? "Stop" : "Start"}</button>
+      <button style={styles.button}
+              onClick={ onStartClick }>{this.props.timerRunning ? "Stop" : "Start"}
+      </button>
     );
   }
 }
