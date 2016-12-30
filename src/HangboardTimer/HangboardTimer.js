@@ -65,18 +65,36 @@ export default class HangboardTimer extends Component {
   }
 
   render() {
-    const styles={
-      transition: "all 500ms ease",
-      fontSize: "20px",
-      minHeight: (this.state.started ? '0' : "20%"),
-      maxHeight: (this.state.started ? '0' : '30%'),
-      textAlign: "center",
-      overflow: 'hidden'
+    const { started } = this.state;
+
+    const styles = {
+      timerSelect: {
+          transition: "all 500ms ease",
+          fontSize: "20px",
+          // height: '20%',
+          // visibility: (this.state.started ? 'hidden' : 'visible'),
+          // minHeight: (this.state.started ? '0' : "20%"),
+          maxHeight: (started ? '0' : '30%'),
+          textAlign: "center",
+          overflow: 'hidden'
+        },
+        timerDisplay: {
+          transition: "all 800ms ease",
+          height: (started ? '80%' : '60%')
+        },
+        timerButtonContainer: {
+          position:'fixed',
+          // left:'0px',
+          bottom:'0px',
+          height:'12%',
+          width:'100%'
+        }
     }
+
 
     return (
       <div style={{ height: '100%', display: 'block'}}>
-        <div style={ styles } className="row">
+        <div style={ styles.timerSelect } className="row">
           {
             Object.keys(this.state.intervals).map((interval, i) => {
               return (
@@ -92,10 +110,10 @@ export default class HangboardTimer extends Component {
             })
           }
         </div>
-        <div style={{ height: "50%"}} className="row">
+        <div style={ styles.timerDisplay } className="row">
           <IntervalTimer start={ this.state.started } {...this.state.intervals} />
         </div>
-        <div style={{ display: 'block', height: '20%'}} className="row">
+        <div style={ styles.timerButtonContainer } className="row">
           <div className="col-xs-12 col-md-8 col-md-offset-2">
             <TimerButton
             timerRunning={ this.state.started }

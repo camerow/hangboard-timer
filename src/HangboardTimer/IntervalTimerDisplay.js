@@ -62,15 +62,15 @@ export default class IntervalTimerDisplay extends Component {
           id="myTimer"
           textAnchor="middle"
           x="150"
-          y="160"
+          y="190"
           style={{fontSize: "48px"}}>
             {this.props.value || 0}
           </text>
           <text
           textAnchor="middle"
           x="150"
-          y="110"
-          style={{fontSize: "48px"}}>
+          y="130"
+          style={{fontSize: "48px", textTransform: 'capitalize'}}>
             {this.props.intervalName || ''}
           </text>
       </svg>
