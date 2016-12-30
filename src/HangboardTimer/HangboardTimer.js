@@ -70,18 +70,21 @@ export default class HangboardTimer extends Component {
       fontSize: "20px",
       minHeight: (this.state.started ? '0' : "20%"),
       maxHeight: (this.state.started ? '0' : '30%'),
-      textAlign: "center",
-      overflow: 'hidden'
+      textAlign: "center"
+      // overflow: 'hidden'
     }
 
+    const { intervals, started } = this.state;
+
     return (
-      <div style={{ height: '100%', display: 'block'}}>
-        <div style={ styles } className="row">
+      <div>
+        <div style={ styles } className="flex-grid-flex">
           {
-            Object.keys(this.state.intervals).map((interval, i) => {
+            Object.keys(intervals).map((interval, i) => {
               return (
                 <TimerValueSelect
-                  timerStarted={this.state.started}
+                  timerStarted={started}
+                  numberOfSelectors={Object.keys(intervals)}
                   key={interval + i}
                   valueName={interval}
                   value={this.state.intervals[interval]}
@@ -92,11 +95,11 @@ export default class HangboardTimer extends Component {
             })
           }
         </div>
-        <div style={{ height: "50%"}} className="row">
+        <div className="flex-container fill-height">
           <IntervalTimer start={ this.state.started } {...this.state.intervals} />
         </div>
-        <div style={{ display: 'block', height: '20%'}} className="row">
-          <div className="col-xs-12 col-md-8 col-md-offset-2">
+        <div className="flex-container fill-height">
+          <div className="col">
             <TimerButton
             timerRunning={ this.state.started }
             onStartClick={ () => { this.setState({ started: !this.state.started })}} />

@@ -122,7 +122,7 @@ export default class IntervalTimer extends Component {
     }
     console.log("duration", this.props[this.state.currentInterval], this.state.currentInterval);
     return (
-      <div style={{ textAlign: "center", fontSize: "50px"}} className="col-xs-12 col-md-8 col-md-offset-2">
+      <div style={{ textAlign: "center", fontSize: "50px"}} className="col">
         <div>
         {
           this.state.currentInterval ?

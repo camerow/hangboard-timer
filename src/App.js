@@ -5,9 +5,7 @@ import "./App.css";
 class App extends Component {
   render() {
     return (
-      <div className="site-wrapper container-fluid">
-        <HangboardTimer />
-      </div>
+      <HangboardTimer />
     );
   }
 }

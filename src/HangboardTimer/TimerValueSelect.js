@@ -3,15 +3,19 @@ import { ArrowButton } from "./";
 
 export default class TimerValueSelect extends Component {
   render() {
-    const { valueName, value, onIncrement, onDecrement, timerStarted } = this.props;
-    const styles={
-      // visibility: (timerStarted ? "hidden" : "visible"),
-      // opacity: (timerStarted ? '0' : '1'),
-      // maxHeight: (timerStarted ? '0' : '100%')
-    };
+    const {
+      valueName,
+      value,
+      onIncrement,
+      onDecrement,
+      timerStarted,
+      numberOfSelectors } = this.props;
 
+    const styles = {
+      flexGrow: 1
+    }
     return(
-      <div style={styles} className="col-xs-3">
+      <div style={styles} className="col">
         <ArrowButton direction="up" handleClick={ onIncrement } />
         <div style={{ margin: "10px 0"}}>{valueName}</div>
         <div style={{ margin: "10px 0 0 0"}}>{value}</div>

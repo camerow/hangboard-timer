@@ -2,10 +2,18 @@ html, body {
   color: #484D6D;
   background-color: #EFE9F4;
   height: 100%;
-  /*overflow: hidden !important;*/
   width: 100%;
-  position: fixed;
+  /*position: fixed;*/
 }
-.site-wrapper, #root {
+
+/*body {
+  margin: 8
+}*/
+
+#root, .react-root {
+  height: 100vh;
+}
+
+.height-full {
   height: 100%;
 }
