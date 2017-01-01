@@ -102,7 +102,20 @@ export default class HangboardTimer extends Component {
         <div style={ styles.timerSelect } className="row">
           {
             Object.keys(this.state.intervals).map((interval, i) => {
-              let timeValue = (interval === 'recover') ? 'min.' : null;
+              let timeValue = '';
+              switch (interval) {
+                case 'recover':
+                  timeValue = 'min.'
+                  break;
+                case 'hang':
+                case 'rest':
+                  timeValue = 'sec.'
+                  break;
+                default:
+                  timeValue = ''
+              }
+              console.log(timeValue);
+              // let timeValue = (interval === 'recover') ? 'min.' : null;
 
               return (
                 <TimerValueSelect

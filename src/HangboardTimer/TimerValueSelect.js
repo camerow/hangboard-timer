@@ -29,7 +29,7 @@ export default class TimerValueSelect extends Component {
       <div style={ styles.valueSelectContainer } className="col-xs-3">
         <ArrowButton direction="up" handleClick={ onIncrement } />
         <div style={ styles.valueName }>{valueName}</div>
-        <div style={ styles.value }>{value} {this.props.timeValue || 'sec.'}</div>
+        <div style={ styles.value }>{value} {this.props.timeValue || ''}</div>
         <ArrowButton direction="down" handleClick={ onDecrement } />
       </div>
     );
