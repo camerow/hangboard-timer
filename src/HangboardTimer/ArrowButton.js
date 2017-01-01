@@ -5,14 +5,14 @@ export default class ArrowButton extends Component {
     const styles = {
       button: {
         margin: '0 auto',
-        borderTop: '0 solid #484D6D',
-        borderLeft: '0 solid #484D6D',
-        borderBottom: '0 solid #484D6D',
-        borderRight: '0 solid #484D6D',
-        borderTopWidth: '20px',
-        borderLeftWidth: '20px',
-        borderRightWidth: '20px',
-        borderBottomWidth: '20px',
+        borderTop: '0 solid #333',
+        borderLeft: '0 solid #333',
+        borderBottom: '0 solid #333',
+        borderRight: '0 solid #333',
+        borderTopWidth: '25px',
+        borderLeftWidth: '25px',
+        borderRightWidth: '25px',
+        borderBottomWidth: '25px',
         background: 'transparent',
         width: '0',
         height: '0'

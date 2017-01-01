@@ -34,17 +34,19 @@ export default class HangboardTimer extends Component {
 
   incrementInterval(intervalName) {
     let newIntervalState = update(this.state.intervals, {
-      [intervalName]: { $apply: function(x) {
-        return x + 1
-      }}
+      [intervalName]: {
+        $apply: function(x) {
+          return x + 1
+        }
+      }
     });
+
     localStorage.setItem('intervals', JSON.stringify(newIntervalState));
 
     this.setState({
       intervals: newIntervalState,
-      currentValaue: newIntervalState['hang']
+      currentValue: newIntervalState['hang']
     });
-
   }
 
   decrementInterval(intervalName) {
@@ -53,7 +55,11 @@ export default class HangboardTimer extends Component {
     }
 
     let newIntervalState = update(this.state.intervals, {
-      [intervalName]: { $apply: function(x) { return x - 1 }}
+      [intervalName]: {
+        $apply: function(x) {
+          return x - 1
+        }
+      }
     });
 
     localStorage.setItem('intervals', JSON.stringify(newIntervalState));
@@ -86,19 +92,21 @@ export default class HangboardTimer extends Component {
         timerButtonContainer: {
           position:'fixed',
           bottom:'0px',
-          height:'12%',
+          height:'15%',
           width:'100%'
         }
     }
-
 
     return (
       <div style={ styles.timerContainer }>
         <div style={ styles.timerSelect } className="row">
           {
             Object.keys(this.state.intervals).map((interval, i) => {
+              let timeValue = (interval === 'recover') ? 'min.' : null;
+
               return (
                 <TimerValueSelect
+                  timeValue={timeValue}
                   timerStarted={this.state.started}
                   key={interval + i}
                   valueName={interval}
@@ -116,8 +124,8 @@ export default class HangboardTimer extends Component {
         <div style={ styles.timerButtonContainer } className="row">
           <div className="col-xs-12 col-md-8 col-md-offset-2">
             <TimerButton
-            timerRunning={ this.state.started }
-            onStartClick={ () => { this.setState({ started: !this.state.started })}} />
+              timerRunning={ this.state.started }
+              onStartClick={ () => { this.setState({ started: !this.state.started })}} />
           </div>
         </div>
       </div>

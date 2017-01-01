@@ -1,19 +1,23 @@
 import React, { Component } from "react";
 import IntervalTimerDisplay from "./IntervalTimerDisplay";
 
+const RECOVERY_MULTIPLIER = 60;
+
 export default class IntervalTimer extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      readyTimer: 0,
+      round: 1
+    };
   }
 
   componentWillReceiveProps(nextProps) {
     let { recover, ...rest } = nextProps;
-
     this.setState({
-      recover: recover * 60,
+      recover: recover * RECOVERY_MULTIPLIER,
       ...rest
-    })
+    });
 
     if (nextProps.start) {
       this.startTimer();
@@ -29,10 +33,14 @@ export default class IntervalTimer extends Component {
       clearInterval(referrer);
     }
 
+    // if (this.state.recover <= 0) {
+    //
+    // }
     if (this.state.reps === 0) {
       this.startRecovery();
       return;
-    } else {
+    }
+    else {
       this.setState({
         hang: this.props.hang
       });
@@ -58,21 +66,47 @@ export default class IntervalTimer extends Component {
     this.setState({
       currentInterval: 'recover',
       hang: this.props.hang,
-      reps: this.props.reps
+      reps: this.props.reps,
+      round: this.state.round + 1
     });
 
     this.recoveryTimer = setInterval(() => {
       if (this.state.recover <= 0) {
-        this.setState({
-          recover: this.props.recover * 60
-        });
-        this.startRest(this.recoveryTimer);
+
+        // this.startRest(this.recoveryTimer);
+        this.leadIn(5, this.recoveryTimer);
       } else {
         this.setState({
           recover: this.state.recover - 1
         })
       }
     }, 1000);
+  }
+
+  leadIn(leadInTime = 5, referrer = false) {
+    this.setState({
+      readyTimer: leadInTime
+    });
+
+    if (referrer) {
+      clearInterval(referrer);
+      this.setState({
+        recover: this.props.recover * RECOVERY_MULTIPLIER,
+        currentInterval: null
+      });
+    }
+    // let timeLeft = leadInTime
+
+    this.leadInInterval = setInterval(() => {
+      this.setState({
+        readyTimer: this.state.readyTimer - 1
+      });
+
+      if (this.state.readyTimer === 0) {
+        this.startHang(this.leadInInterval);
+      }
+    }, 1000);
+
   }
 
   startHang(referrer) {
@@ -104,43 +138,68 @@ export default class IntervalTimer extends Component {
   }
 
   startTimer() {
-    this.startHang();
+    this.leadIn();
   }
 
   stopTimer() {
     this.setState({
-      currentInterval: null
+      currentInterval: null,
+      readyTimer: 0,
+      round: 1
     });
+
     clearInterval(this.hangTimer);
     clearInterval(this.restTimer);
     clearInterval(this.recoveryTimer);
+    clearInterval(this.leadInInterval);
   }
 
   render() {
     const { currentInterval } = this.state;
     const styles = {
-      timerDisplay: {
+      timerDisplayContainer: {
         textAlign: "center",
         fontSize: "50px"
+      },
+      timerDisplay: {
+        transition: "all 500ms ease-in"
+      },
+      leadInContainer: {
+        height: '50%'
       }
     };
 
     return (
-      <div style={ styles.timerDisplay } className="col-xs-12 col-md-8 col-md-offset-2">
-        <div>
+      <div style={ styles.timerDisplayContainer } className="col-xs-12 col-md-8 col-md-offset-2">
         {
           currentInterval ?
-          <IntervalTimerDisplay
-            intervalName={currentInterval}
-            duration={this.props[currentInterval]}
-            value={this.state[currentInterval]}>
-          </IntervalTimerDisplay>
-          :
-          null
+            <div style={ styles.timerDisplay }>
+              <IntervalTimerDisplay
+                intervalName={currentInterval}
+                duration={this.props[currentInterval]}
+                value={this.state[currentInterval]}>
+              </IntervalTimerDisplay>
+              <br></br>
+              <p>Reps: {this.state.reps}</p>
+            </div>
+            :
+            null
         }
-          <br></br>
-          Reps: {this.state.reps}
-        </div>
+
+        {
+          this.state.readyTimer ?
+            <div style={{ marginTop: '100px'}}>
+              {
+                this.state.round ?
+                <p>Round {this.state.round }</p>
+                :
+                null
+              }
+              <p>Begin in { this.state.readyTimer }</p>
+            </div>
+            :
+            null
+        }
       </div>
     );
   }

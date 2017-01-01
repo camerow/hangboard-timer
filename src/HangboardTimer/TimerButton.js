@@ -4,8 +4,9 @@ export default class TimerButtons extends Component {
   render() {
     const styles = {
       button: {
-        height: '50px',
+        height: '70px',
         width: '100%',
+        fontSize: '36px',
         color: 'white',
         border: 'none',
         borderRadius: '10px',
@@ -16,7 +17,7 @@ export default class TimerButtons extends Component {
     const { onStartClick } = this.props;
 
     return (
-      <button style={styles.button}
+      <button style={Object.assign({}, styles.button, this.props.style)}
               onClick={ onStartClick }>{this.props.timerRunning ? "Stop" : "Start"}
       </button>
     );

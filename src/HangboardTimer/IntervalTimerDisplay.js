@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-// @TODO <animate> is deprecated, move that to CSS.
 export default class IntervalTimerDisplay extends Component {
   constructor(props) {
     super(props);
