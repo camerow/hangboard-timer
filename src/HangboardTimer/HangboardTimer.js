@@ -114,8 +114,6 @@ export default class HangboardTimer extends Component {
                 default:
                   timeValue = ''
               }
-              console.log(timeValue);
-              // let timeValue = (interval === 'recover') ? 'min.' : null;
 
               return (
                 <TimerValueSelect

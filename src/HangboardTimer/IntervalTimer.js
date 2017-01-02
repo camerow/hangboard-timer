@@ -180,7 +180,8 @@ export default class IntervalTimer extends Component {
                 value={this.state[currentInterval]}>
               </IntervalTimerDisplay>
               <br></br>
-              <p>Reps: {this.state.reps}</p>
+
+              <p className="vhs-pop">Reps: {this.state.reps}</p>
             </div>
             :
             null
@@ -188,7 +189,7 @@ export default class IntervalTimer extends Component {
 
         {
           this.state.readyTimer ?
-            <div style={{ marginTop: '100px'}}>
+            <div style={{ marginTop: '100px'}} className="vhs-bottom">
               {
                 this.state.round ?
                 <p>Round {this.state.round }</p>
