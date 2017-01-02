@@ -7,13 +7,12 @@ export default class TimerValueSelect extends Component {
       valueName,
       value,
       onIncrement,
-      onDecrement,
-      timerStarted
+      onDecrement
     } = this.props;
 
     const styles = {
       valueSelectContainer: {
-        fontSize: '20px'
+        fontSize: '24px'
       },
       valueName: {
         margin: '10px 0',
@@ -26,7 +25,7 @@ export default class TimerValueSelect extends Component {
     };
 
     return(
-      <div style={ styles.valueSelectContainer } className="col-xs-3">
+      <div style={ styles.valueSelectContainer } className="col-xs-6 vhs-top">
         <ArrowButton direction="up" handleClick={ onIncrement } />
         <div style={ styles.valueName }>{valueName}</div>
         <div style={ styles.value }>{value} {this.props.timeValue || ''}</div>

@@ -1,11 +1,21 @@
 html, body {
   color: #333;
   background-color: #EFE9F4;
-  height: 100%;
-  /*overflow: hidden !important;*/
+  /*height: 100%;*/
   width: 100%;
   position: fixed;
 }
+
 .site-wrapper, #root {
   height: 100%;
+}
+
+button:focus {
+  outline: none;
+}
+
+@media (min-width: 800px) {
+  .timer-display {
+    width: 400px;
+  }
 }

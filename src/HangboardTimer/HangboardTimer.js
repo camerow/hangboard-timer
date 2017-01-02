@@ -5,6 +5,7 @@ import {
   TimerValueSelect
 } from "./";
 import IntervalTimer from "./IntervalTimer";
+import Section from 'rebass/dist/Section';
 
 export default class HangboardTimer extends Component {
   constructor() {
@@ -81,13 +82,13 @@ export default class HangboardTimer extends Component {
       timerSelect: {
           transition: "all 500ms ease",
           fontSize: "20px",
-          maxHeight: (started ? '0' : '30%'),
+          height: (started ? '0' : 'auto'),
           textAlign: "center",
           overflow: 'hidden'
         },
         timerDisplay: {
           transition: "all 800ms ease",
-          height: (started ? '80%' : '60%')
+          height: (started ? '80%' : '0%')
         },
         timerButtonContainer: {
           position:'fixed',
@@ -98,9 +99,11 @@ export default class HangboardTimer extends Component {
     }
 
     return (
-      <div style={ styles.timerContainer }>
+      <div className="container-fluid" style={ styles.timerContainer }>
         <div style={ styles.timerSelect } className="row">
-          {
+          { this.state.started ?
+            null
+            :
             Object.keys(this.state.intervals).map((interval, i) => {
               let timeValue = '';
               switch (interval) {
@@ -114,13 +117,10 @@ export default class HangboardTimer extends Component {
                 default:
                   timeValue = ''
               }
-              console.log(timeValue);
-              // let timeValue = (interval === 'recover') ? 'min.' : null;
 
               return (
                 <TimerValueSelect
                   timeValue={timeValue}
-                  timerStarted={this.state.started}
                   key={interval + i}
                   valueName={interval}
                   value={this.state.intervals[interval]}
@@ -131,14 +131,19 @@ export default class HangboardTimer extends Component {
             })
           }
         </div>
-        <div style={ styles.timerDisplay } className="row">
+        <div className="row">
           <IntervalTimer start={ this.state.started } {...this.state.intervals} />
         </div>
         <div style={ styles.timerButtonContainer } className="row">
           <div className="col-xs-12 col-md-8 col-md-offset-2">
             <TimerButton
               timerRunning={ this.state.started }
-              onStartClick={ () => { this.setState({ started: !this.state.started })}} />
+              onStartClick={ () => {
+                  this.setState({
+                    started: !this.state.started
+                  })
+                }
+              } />
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Button from 'rebass/dist/Button';
 
 export default class TimerButtons extends Component {
   render() {
@@ -6,7 +7,7 @@ export default class TimerButtons extends Component {
       button: {
         height: '70px',
         width: '100%',
-        fontSize: '36px',
+        fontSize: '32px',
         color: 'white',
         border: 'none',
         borderRadius: '10px',
@@ -15,11 +16,9 @@ export default class TimerButtons extends Component {
     }
 
     const { onStartClick } = this.props;
-
     return (
-      <button style={Object.assign({}, styles.button, this.props.style)}
-              onClick={ onStartClick }>{this.props.timerRunning ? "Stop" : "Start"}
-      </button>
+      <Button style={Object.assign({}, styles.button, this.props.style)}
+              onClick={ onStartClick }>{this.props.timerRunning ? "Stop" : "Start"}</Button>
     );
   }
 }
