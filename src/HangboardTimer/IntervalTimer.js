@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import IntervalTimerDisplay from "./IntervalTimerDisplay";
+import SequenceMap from 'rebass/dist/SequenceMap';
 
 const RECOVERY_MULTIPLIER = 60;
 
@@ -19,6 +20,8 @@ export default class IntervalTimer extends Component {
       ...rest
     });
 
+    this.createSteps(nextProps.reps);
+
     if (nextProps.start) {
       this.startTimer();
     }
@@ -28,14 +31,24 @@ export default class IntervalTimer extends Component {
     }
   }
 
+  createSteps(numOfReps) {
+    let repetitions = [];
+    for (var i = 1; i <= numOfReps; i++) {
+      repetitions.push({
+        children: i
+      });
+    };
+
+    this.setState({
+      steps: repetitions
+    })
+  }
+
   startRest(referrer) {
     if (referrer) {
       clearInterval(referrer);
     }
 
-    // if (this.state.recover <= 0) {
-    //
-    // }
     if (this.state.reps === 0) {
       this.startRecovery();
       return;
@@ -73,7 +86,6 @@ export default class IntervalTimer extends Component {
     this.recoveryTimer = setInterval(() => {
       if (this.state.recover <= 0) {
 
-        // this.startRest(this.recoveryTimer);
         this.leadIn(5, this.recoveryTimer);
       } else {
         this.setState({
@@ -95,7 +107,6 @@ export default class IntervalTimer extends Component {
         currentInterval: null
       });
     }
-    // let timeLeft = leadInTime
 
     this.leadInInterval = setInterval(() => {
       this.setState({
@@ -169,6 +180,22 @@ export default class IntervalTimer extends Component {
       }
     };
 
+    let leadInTimer = (showLeadIn) => {
+      let countdownTimer = showLeadIn ?
+        <div style={{ marginTop: '100px'}} className="vhs-bottom">
+          {
+            this.state.round ?
+            <p>Round {this.state.round }</p>
+            :
+            null
+          }
+          <p>Begin in { this.state.readyTimer }</p>
+        </div>
+        :
+        null
+      return countdownTimer;
+    };
+
     return (
       <div style={ styles.timerDisplayContainer } className="col-xs-12 col-md-8 col-md-offset-2">
         {
@@ -179,28 +206,16 @@ export default class IntervalTimer extends Component {
                 duration={this.props[currentInterval]}
                 value={this.state[currentInterval]}>
               </IntervalTimerDisplay>
-              <br></br>
-
-              <p className="vhs-pop">Reps: {this.state.reps}</p>
+              <SequenceMap
+              active={ Math.abs(this.props.reps - this.state.reps) }
+              steps={ this.state.steps } />
+              {/* <p className="vhs-pop">{this.state.reps}/{this.props.reps} complete</p>*/}
             </div>
             :
             null
         }
 
-        {
-          this.state.readyTimer ?
-            <div style={{ marginTop: '100px'}} className="vhs-bottom">
-              {
-                this.state.round ?
-                <p>Round {this.state.round }</p>
-                :
-                null
-              }
-              <p>Begin in { this.state.readyTimer }</p>
-            </div>
-            :
-            null
-        }
+        { leadInTimer(this.state.readyTimer) }
       </div>
     );
   }
