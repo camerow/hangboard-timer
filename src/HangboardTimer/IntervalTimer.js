@@ -13,6 +13,13 @@ export default class IntervalTimer extends Component {
     };
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+    if (nextState.reps <= 3 || nextState.rest <= 3 || nextState.recover <= 3 && navigator.vibrate) {
+        navigator.vibrate(500);
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     let { recover, ...rest } = nextProps;
     this.setState({
@@ -66,7 +73,7 @@ export default class IntervalTimer extends Component {
         } else {
           this.setState({
             rest: this.state.rest - 1
-          })
+          });
         }
       }, 1000);
     }
@@ -90,7 +97,7 @@ export default class IntervalTimer extends Component {
       } else {
         this.setState({
           recover: this.state.recover - 1
-        })
+        });
       }
     }, 1000);
   }
@@ -139,6 +146,9 @@ export default class IntervalTimer extends Component {
         this.startRest(this.hangTimer);
 
       } else if (this.state.reps > 0) {
+        if (this.state.hang <= 3) {
+          navigator.vibrate(500);
+        }
         this.setState({
           hang: this.state.hang - 1
         })
