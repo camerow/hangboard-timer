@@ -15,7 +15,7 @@ export default class IntervalTimer extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-    if (nextState.reps <= 3 || nextState.rest <= 3 || nextState.recover <= 3 && navigator.vibrate) {
+    if ((nextState.hang <= 3 || nextState.rest <= 3 || nextState.recover <= 3 || nextState.readyTimer <= 3) && navigator.vibrate) {
         navigator.vibrate(500);
     }
   }
