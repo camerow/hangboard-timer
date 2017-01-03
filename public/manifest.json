@@ -4,7 +4,7 @@
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#fff",
-  "theme-color": "#333",
+  "theme-color": "rgb(0, 136, 238)",
   "description": "A simple web accesible hangboard app.",
   "icons": [
 		{
