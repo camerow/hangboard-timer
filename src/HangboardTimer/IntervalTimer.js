@@ -198,16 +198,17 @@ export default class IntervalTimer extends Component {
   }
 
   stopTimer() {
+    this.clearAnimationFrameInterval(this.hangTimer);
+    this.clearAnimationFrameInterval(this.restTimer);
+    this.clearAnimationFrameInterval(this.recoveryTimer);
+    this.clearAnimationFrameInterval(this.leadInInterval);
+    
     this.setState({
       currentInterval: null,
       readyTimer: 0,
       round: 1
     });
 
-    this.clearAnimationFrameInterval(this.hangTimer);
-    this.clearAnimationFrameInterval(this.restTimer);
-    this.clearAnimationFrameInterval(this.recoveryTimer);
-    this.clearAnimationFrameInterval(this.leadInInterval);
   }
 
   render() {
