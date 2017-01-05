@@ -184,9 +184,6 @@ export default class IntervalTimer extends Component {
         });
 
       } else if (this.state.reps > 0) {
-        if (this.state.hang <= 3) {
-          navigator.vibrate(500);
-        }
         this.setState({
           hang: this.state.hang - 1
         })
