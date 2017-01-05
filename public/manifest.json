@@ -1,10 +1,10 @@
 {
-  "name": "Hangboarder",
-  "short_name": "Hangboarder",
+  "name": "Hangboard",
+  "short_name": "Hangboard",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#fff",
-  "theme-color": "rgb(0, 136, 238)",
+  "theme-color": "#0088ee",
   "description": "A simple web accesible hangboard app.",
   "icons": [
 		{

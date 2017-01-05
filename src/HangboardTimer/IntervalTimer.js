@@ -17,10 +17,9 @@ export default class IntervalTimer extends Component {
     navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
     if (
       (nextState.hang <= 3 && nextState.currentInterval === 'hang') ||
-      (nextState.rest <= 3 && nextState.currentInterval === 'rest') || 
+      (nextState.rest <= 3 && nextState.currentInterval === 'rest') ||
       (nextState.readyTimer && nextState.readyTimer <= 3)
       && navigator.vibrate) {
-      console.log('vibrate', nextProps);
         navigator.vibrate(500);
     }
   }
@@ -68,19 +67,19 @@ export default class IntervalTimer extends Component {
     else {
       this.setState({
         hang: this.props.hang
+      }, () => {
+        this.restTimer = setInterval(() => {
+          if (this.state.rest <= 1) {
+            clearInterval(this.restTimer);
+            this.startHang(this.restTimer);
+
+          } else {
+            this.setState({
+              rest: this.state.rest - 1
+            });
+          }
+        }, 1000);
       });
-
-      this.restTimer = setInterval(() => {
-        if (this.state.rest <= 0) {
-          clearInterval(this.restTimer);
-          this.startHang(this.restTimer);
-
-        } else {
-          this.setState({
-            rest: this.state.rest - 1
-          });
-        }
-      }, 1000);
     }
   }
 
@@ -88,46 +87,52 @@ export default class IntervalTimer extends Component {
     if (referrer) {
       clearInterval(referrer);
     }
+
     this.setState({
       currentInterval: 'recover',
       hang: this.props.hang,
       reps: this.props.reps,
       round: this.state.round + 1
+    }, () => {
+      this.recoveryTimer = setInterval(() => {
+        if (this.state.recover <= 1) {
+
+          this.leadIn(5, this.recoveryTimer);
+        } else {
+          this.setState({
+            recover: this.state.recover - 1
+          });
+        }
+      }, 1000);
     });
 
-    this.recoveryTimer = setInterval(() => {
-      if (this.state.recover <= 0) {
-
-        this.leadIn(5, this.recoveryTimer);
-      } else {
-        this.setState({
-          recover: this.state.recover - 1
-        });
-      }
-    }, 1000);
   }
 
   leadIn(leadInTime = 5, referrer = false) {
-    this.setState({
-      readyTimer: leadInTime
-    });
-
+    // If another interval triggered this
     if (referrer) {
       clearInterval(referrer);
       this.setState({
+        readyTimer: leadInTime,
         recover: this.props.recover * RECOVERY_MULTIPLIER,
         currentInterval: null
+      });
+    } else {
+      this.setState({
+        readyTimer: leadInTime
       });
     }
 
     this.leadInInterval = setInterval(() => {
       this.setState({
         readyTimer: this.state.readyTimer - 1
+      }, () => {
+        if (this.state.readyTimer === 0) {
+          this.startHang(this.leadInInterval);
+        }
       });
 
-      if (this.state.readyTimer === 0) {
-        this.startHang(this.leadInInterval);
-      }
+
     }, 1000);
 
   }
@@ -143,12 +148,13 @@ export default class IntervalTimer extends Component {
     });
 
     this.hangTimer = setInterval(() => {
-      if (this.state.hang <= 0) {
+      if (this.state.hang <= 1) {
         this.setState({
           currentInterval: 'rest',
           reps: this.state.reps - 1
+        }, () => {
+          this.startRest(this.hangTimer);
         });
-        this.startRest(this.hangTimer);
 
       } else if (this.state.reps > 0) {
         if (this.state.hang <= 3) {
