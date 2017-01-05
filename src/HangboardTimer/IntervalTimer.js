@@ -4,6 +4,23 @@ import SequenceMap from 'rebass/dist/SequenceMap';
 
 const RECOVERY_MULTIPLIER = 60;
 
+let rInterval = function(callback,delay) {
+  var dateNow = Date.now,
+     requestAnimation = window.requestAnimationFrame,
+     start = dateNow(),
+     stop,
+     intervalFunc = function() {
+      dateNow()-start<delay||(start+=delay,callback());
+      stop||requestAnimation(intervalFunc)
+     }
+
+  requestAnimation(intervalFunc);
+
+  return {
+    clear: function() { stop = 1 }
+  }
+}
+
 export default class IntervalTimer extends Component {
   constructor() {
     super();
@@ -55,9 +72,19 @@ export default class IntervalTimer extends Component {
     })
   }
 
+  clearAnimationFrameInterval(interval) {
+    if (interval && interval.clear) {
+      interval.clear();
+    } else if (interval) {
+      clearInterval(interval);
+    }
+  }
+
   startRest(referrer) {
-    if (referrer) {
-      clearInterval(referrer);
+    if (referrer.clear) {
+      referrer.clear();
+    } else {
+      this.clearAnimationFrameInterval(referrer);
     }
 
     if (this.state.reps === 0) {
@@ -68,9 +95,9 @@ export default class IntervalTimer extends Component {
       this.setState({
         hang: this.props.hang
       }, () => {
-        this.restTimer = setInterval(() => {
+        this.restTimer = rInterval(() => {
           if (this.state.rest <= 1) {
-            clearInterval(this.restTimer);
+            this.clearAnimationFrameInterval(this.restTimer);
             this.startHang(this.restTimer);
 
           } else {
@@ -85,7 +112,7 @@ export default class IntervalTimer extends Component {
 
   startRecovery(referrer) {
     if (referrer) {
-      clearInterval(referrer);
+      this.clearAnimationFrameInterval(referrer);
     }
 
     this.setState({
@@ -94,7 +121,7 @@ export default class IntervalTimer extends Component {
       reps: this.props.reps,
       round: this.state.round + 1
     }, () => {
-      this.recoveryTimer = setInterval(() => {
+      this.recoveryTimer = rInterval(() => {
         if (this.state.recover <= 1) {
 
           this.leadIn(5, this.recoveryTimer);
@@ -111,7 +138,7 @@ export default class IntervalTimer extends Component {
   leadIn(leadInTime = 5, referrer = false) {
     // If another interval triggered this
     if (referrer) {
-      clearInterval(referrer);
+      this.clearAnimationFrameInterval(referrer);
       this.setState({
         readyTimer: leadInTime,
         recover: this.props.recover * RECOVERY_MULTIPLIER,
@@ -123,7 +150,7 @@ export default class IntervalTimer extends Component {
       });
     }
 
-    this.leadInInterval = setInterval(() => {
+    this.leadInInterval = rInterval(() => {
       this.setState({
         readyTimer: this.state.readyTimer - 1
       }, () => {
@@ -139,7 +166,7 @@ export default class IntervalTimer extends Component {
 
   startHang(referrer) {
     if (referrer) {
-      clearInterval(referrer);
+      this.clearAnimationFrameInterval(referrer);
     }
 
     this.setState({
@@ -147,7 +174,7 @@ export default class IntervalTimer extends Component {
       rest: this.props.rest
     });
 
-    this.hangTimer = setInterval(() => {
+    this.hangTimer = rInterval(() => {
       if (this.state.hang <= 1) {
         this.setState({
           currentInterval: 'rest',
@@ -180,10 +207,10 @@ export default class IntervalTimer extends Component {
       round: 1
     });
 
-    clearInterval(this.hangTimer);
-    clearInterval(this.restTimer);
-    clearInterval(this.recoveryTimer);
-    clearInterval(this.leadInInterval);
+    this.clearAnimationFrameInterval(this.hangTimer);
+    this.clearAnimationFrameInterval(this.restTimer);
+    this.clearAnimationFrameInterval(this.recoveryTimer);
+    this.clearAnimationFrameInterval(this.leadInInterval);
   }
 
   render() {
