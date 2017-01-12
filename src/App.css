@@ -19,3 +19,11 @@ button:focus {
     width: 400px;
   }
 }
+
+.timer-button-row {
+  margin: 8px;
+}
+
+.timer-select-row {
+  margin-bottom: 32px;
+}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import SequenceMap from 'rebass/dist/SequenceMap';
 
 export default class IntervalTimerDisplay extends Component {
   constructor(props) {
@@ -22,6 +23,21 @@ export default class IntervalTimerDisplay extends Component {
     }
   }
 
+  componentDidMount() {
+    let repetitions = [];
+    for (var i = 1; i <= this.props.givenReps; i++) {
+      repetitions.push({
+        children: i
+      });
+    };
+
+    this.setState({
+      steps: repetitions
+    });
+
+
+  }
+
   componentWillReceiveProps(nextProps) {
     const { value, intervalName, duration } = nextProps;
 
@@ -37,9 +53,17 @@ export default class IntervalTimerDisplay extends Component {
   render() {
     const { fill, outerStroke, strokeWidth, value, intervalName } = this.props;
     const { duration } = this.state;
-
+    const styles = {
+      timerDisplayContainer: {
+        textAlign: "center",
+        fontSize: "50px"
+      },
+      leadInContainer: {
+        height: '75%'
+      }
+    };
     return (
-      <div className="vhs-fade">
+      <div style={ styles.timerDisplayContainer } className="col-xs-12 col-md-8 col-md-offset-2 vhs-fade">
         <svg className="timer-display" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 300 300" preserveAspectRatio="none">
             <circle
               cx="50"
@@ -76,6 +100,9 @@ export default class IntervalTimerDisplay extends Component {
                 {intervalName || ''}
             </text>
         </svg>
+        <SequenceMap
+        active={ Math.abs(this.props.givenReps - this.props.completedReps) }
+        steps={ this.state.steps } />
       </div>
 
     );

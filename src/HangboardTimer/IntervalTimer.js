@@ -22,20 +22,29 @@ let rInterval = function(callback,delay) {
 }
 
 export default class IntervalTimer extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      readyTimer: 0,
-      round: 1
+      leadInTime: 0,
+      round: 1,
+      vibrate: props.vibrate
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  componentWillMount() {
     navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-    if (
-      (nextState.hang <= 3 && nextState.currentInterval === 'hang') ||
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.vibrate) {
+      this.vibrate(nextProps, nextState);
+    }
+  }
+
+  vibrate(nextProps, nextState) {
+    if ((nextState.hang <= 3 && nextState.currentInterval === 'hang') ||
       (nextState.rest <= 3 && nextState.currentInterval === 'rest') ||
-      (nextState.readyTimer && nextState.readyTimer <= 3)
+      (nextState.leadInTime && nextState.leadInTime <= 3)
       && navigator.vibrate) {
         navigator.vibrate(500);
     }
@@ -48,8 +57,6 @@ export default class IntervalTimer extends Component {
       ...rest
     });
 
-    this.createSteps(nextProps.reps);
-
     if (nextProps.start) {
       this.startTimer();
     }
@@ -57,19 +64,6 @@ export default class IntervalTimer extends Component {
     if (!nextProps.start) {
       this.stopTimer();
     }
-  }
-
-  createSteps(numOfReps) {
-    let repetitions = [];
-    for (var i = 1; i <= numOfReps; i++) {
-      repetitions.push({
-        children: i
-      });
-    };
-
-    this.setState({
-      steps: repetitions
-    })
   }
 
   clearAnimationFrameInterval(interval) {
@@ -140,21 +134,21 @@ export default class IntervalTimer extends Component {
     if (referrer) {
       this.clearAnimationFrameInterval(referrer);
       this.setState({
-        readyTimer: leadInTime,
+        leadInTime: leadInTime,
         recover: this.props.recover * RECOVERY_MULTIPLIER,
         currentInterval: null
       });
     } else {
       this.setState({
-        readyTimer: leadInTime
+        leadInTime: leadInTime
       });
     }
 
     this.leadInInterval = rInterval(() => {
       this.setState({
-        readyTimer: this.state.readyTimer - 1
+        leadInTime: this.state.leadInTime - 1
       }, () => {
-        if (this.state.readyTimer === 0) {
+        if (this.state.leadInTime === 0) {
           this.startHang(this.leadInInterval);
         }
       });
@@ -202,66 +196,31 @@ export default class IntervalTimer extends Component {
     this.clearAnimationFrameInterval(this.restTimer);
     this.clearAnimationFrameInterval(this.recoveryTimer);
     this.clearAnimationFrameInterval(this.leadInInterval);
-    
+
     this.setState({
       currentInterval: null,
-      readyTimer: 0,
+      leadInTime: 0,
       round: 1
     });
 
   }
 
   render() {
-    const { currentInterval } = this.state;
-    const styles = {
-      timerDisplayContainer: {
-        textAlign: "center",
-        fontSize: "50px"
-      },
-      timerDisplay: {
-        transition: "all 500ms ease-in"
-      },
-      leadInContainer: {
-        height: '50%'
-      }
-    };
-
-    let leadInTimer = (showLeadIn) => {
-      let countdownTimer = showLeadIn ?
-        <div style={{ marginTop: '100px'}} className="vhs-bottom">
-          {
-            this.state.round ?
-            <p>Round {this.state.round }</p>
-            :
-            null
-          }
-          <p>Begin in { this.state.readyTimer }</p>
-        </div>
-        :
-        null
-      return countdownTimer;
-    };
-
     return (
-      <div style={ styles.timerDisplayContainer } className="col-xs-12 col-md-8 col-md-offset-2">
+      <div>
         {
-          currentInterval ?
-            <div style={ styles.timerDisplay }>
-              <IntervalTimerDisplay
-                intervalName={currentInterval}
-                duration={this.props[currentInterval]}
-                value={this.state[currentInterval]}>
-              </IntervalTimerDisplay>
-              <SequenceMap
-              active={ Math.abs(this.props.reps - this.state.reps) }
-              steps={ this.state.steps } />
-              {/* <p className="vhs-pop">{this.state.reps}/{this.props.reps} complete</p>*/}
-            </div>
-            :
-            null
+          this.props.children({
+            started: this.props.start,
+            givenTime: this.props[this.state.currentInterval],
+            givenReps: this.props.reps,
+            completedReps: this.state.reps,
+            currentTime: this.state[this.state.currentInterval],
+            intervalName: this.state.currentInterval,
+            round: this.state.round,
+            leadInTime: this.state.leadInTime,
+            reps: this.state.reps
+          })
         }
-
-        { leadInTimer(this.state.readyTimer) }
       </div>
     );
   }
