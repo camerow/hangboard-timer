@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import IntervalTimerDisplay from "./IntervalTimerDisplay";
 import SequenceMap from 'rebass/dist/SequenceMap';
 
@@ -21,13 +21,12 @@ let rInterval = function(callback,delay) {
   }
 }
 
-export default class IntervalTimer extends Component {
+export default class IntervalTimer extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       leadInTime: 0,
-      round: 1,
-      vibrate: props.vibrate
+      round: 1
     };
   }
 
@@ -36,7 +35,8 @@ export default class IntervalTimer extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (this.state.vibrate) {
+    let vibrate = JSON.parse(localStorage.getItem('vibrate'));
+    if (vibrate) {
       this.vibrate(nextProps, nextState);
     }
   }

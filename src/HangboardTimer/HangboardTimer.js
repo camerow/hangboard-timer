@@ -22,7 +22,6 @@ export default class HangboardTimer extends Component {
       currentValue: 0,
       currentInterval: 'hang',
       started: false,
-      vibrate: true
     }
   }
 
@@ -149,8 +148,8 @@ export default class HangboardTimer extends Component {
             :
             null
           }
-        <div  className="row">
-        <IntervalTimer vibrate={this.props.shouldVibrate} start={ this.state.started } {...this.state.intervals}>
+        <div className="row">
+        <IntervalTimer start={ this.state.started } {...this.state.intervals}>
           {
             ({started, givenTime, givenReps, completedReps, currentTime, intervalName, round, leadInTime}) =>
               (intervalName === null && started) ?
