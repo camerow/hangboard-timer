@@ -1,13 +1,17 @@
+/* Light reset */
+body {margin: 0; padding: 0; font-size: 100%; line-height: 1.5;}
+article, aside, figcaption, figure, footer, header, nav, section {display: block;}
+h1, h2, h3, h4 {margin: 1em 0 .5em; line-height: 1.25;}
+h1 {font-size: 2em;}
+h2 {font-size: 1.5em;}
+h3 {font-size: 1.2em;}
+ul, ol {margin: 1em 0; padding-left: 40px;}
+p, figure {margin: 1em 0;}
+a img {border: none;}
+sup, sub {line-height: 0;}
 html, body {
-  color: #333;
   background-color: #EFE9F4;
-  /*height: 100%;*/
   width: 100%;
-  position: fixed;
-}
-
-.site-wrapper, #root {
-  height: 100%;
 }
 
 button:focus {

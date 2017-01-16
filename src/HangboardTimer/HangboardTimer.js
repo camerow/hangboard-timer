@@ -126,7 +126,7 @@ export default class HangboardTimer extends Component {
     };
 
     return (
-      <div>
+      <div style={{ marginTop: '48px' }}>
       { !this.state.started ?
         <div style={ styles.timerSelect } className="timer-select-row row">
             {
@@ -165,7 +165,7 @@ export default class HangboardTimer extends Component {
           }
         </IntervalTimer>
         </div>
-        <Fixed style={{ margin: '24px'}} bottom={true} left={true} right={true}>
+        <Fixed style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '24px'}} bottom={true} left={true} right={true}>
           <TimerButton
             timerRunning={ this.state.started }
             onStartClick={ () =>

@@ -6,14 +6,14 @@ export default class TimerButtons extends Component {
     const styles = {
       button: {
         height: '70px',
-        width: '100%',
+        maxWidth: '500px',
+        minWidth: '250px',
         fontSize: '32px',
         color: 'white',
         border: 'none',
-        borderRadius: '10px',
-        // backgroundColor: this.props.timerRunning ? '#EE6352' : '#57a773'
+        borderRadius: '10px'
       }
-    }
+    };
 
     const { onStartClick } = this.props;
     return (

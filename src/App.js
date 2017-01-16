@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HangboardTimer } from "./HangboardTimer/index";
+import { HangboardTimer } from "./HangboardTimer";
 import Navigation from './Navigation';
 
 import Container from 'rebass/dist/Container';
@@ -20,7 +20,8 @@ class App extends Component {
           white: '#fff',
           black: '#333333',
           success: '#57a773',
-          warning: '#EE6352'
+          warning: '#EE6352',
+          info: '#08e'
         },
         baseStyles: {
           color: '#33333'
