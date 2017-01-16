@@ -1,6 +1,4 @@
 import React, { PureComponent } from "react";
-import IntervalTimerDisplay from "./IntervalTimerDisplay";
-import SequenceMap from 'rebass/dist/SequenceMap';
 
 const RECOVERY_MULTIPLIER = 60;
 

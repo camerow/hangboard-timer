@@ -7,13 +7,41 @@ import Container from 'rebass/dist/Container';
 import '../node_modules/vhs/css/vhs.min.css';
 import "./App.css";
 
-class App extends Component {  
+class App extends Component {
+  static childContextTypes = {
+    rebass: React.PropTypes.object
+  }
+
+  getChildContext () {
+    return {
+      rebass: {
+        colors: {
+          primary: '#0088ee',
+          white: '#fff',
+          black: '#333333',
+          success: '#57a773',
+          warning: '#EE6352'
+        },
+        baseStyles: {
+          color: '#33333'
+        },
+        fontSizes: [ 64, 48, 24, 18, 16, 14, 12],
+        NavItem: {
+          color: '#EFE9F4'
+        },
+        Close: {
+          color: 'black'
+        }
+      }
+    }
+  }
+
   render() {
     return (
       <div>
         <Navigation />
         <Container>
-          <HangboardTimer />
+          { this.props.children || HangboardTimer }
         </Container>
       </div>
     );

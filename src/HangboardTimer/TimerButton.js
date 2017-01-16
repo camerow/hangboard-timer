@@ -11,14 +11,18 @@ export default class TimerButtons extends Component {
         color: 'white',
         border: 'none',
         borderRadius: '10px',
-        backgroundColor: this.props.timerRunning ? '#EE6352' : '#57a773'
+        // backgroundColor: this.props.timerRunning ? '#EE6352' : '#57a773'
       }
     }
 
     const { onStartClick } = this.props;
     return (
-      <Button style={Object.assign({}, styles.button, this.props.style)}
-              onClick={ onStartClick }>{this.props.timerRunning ? "Stop" : "Start"}</Button>
+      <Button
+        style={Object.assign({}, styles.button, this.props.style)}
+        theme={ this.props.timerRunning ? 'warning' : 'success'}
+        onClick={ onStartClick }>
+        {this.props.timerRunning ? "Stop" : "Start"}
+      </Button>
     );
   }
 }

@@ -41,7 +41,7 @@ export default class IntervalTimerDisplay extends Component {
   componentWillReceiveProps(nextProps) {
     const { value, intervalName, duration } = nextProps;
 
-    this.stopAnimation(nextProps.value);
+    this.stopAnimation(value);
     if (intervalName !== this.state.currentInterval) {
       this.setState({
         currentInterval: intervalName,
